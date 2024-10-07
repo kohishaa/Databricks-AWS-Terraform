@@ -21,3 +21,30 @@ module "dev_compute_policy" {
   }
 }
 
+module "cluster_creation" {
+  source = "../../common_modules_workspace/cluster_creation"
+
+  # Pass workspace ID 
+  
+  workspace_url   = var.workspace_url
+
+
+  # Pass variables for all-purpose cluster
+  cluster_name             = var.resource_prefix
+  spark_version            = var.spark_version
+  node_type_id             = var.node_type_id
+  min_workers              = var.min_workers
+  max_workers              = var.max_workers
+  autotermination_minutes  = var.autotermination_minutes
+  spark_profile            = var.spark_profile
+  cluster_type             = var.cluster_type
+
+  # Pass variables for SQL compute cluster
+  sql_compute_name         = var.resource_prefix
+  sql_cluster_size         = var.sql_cluster_size
+  sql_min_num_clusters     = var.sql_min_num_clusters
+  sql_max_num_clusters     = var.sql_max_num_clusters
+  sql_auto_stop_mins       = var.sql_auto_stop_mins
+}
+
+

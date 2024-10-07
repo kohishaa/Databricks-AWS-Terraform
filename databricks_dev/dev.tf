@@ -19,7 +19,8 @@ module "cloud_provider" {
   
 }
 
- module "databricks_account" {
+
+  module "databricks_account" {
     source = "./databricks_account"
     providers = {
         databricks = databricks.mws
@@ -37,6 +38,7 @@ module "cloud_provider" {
       user_name              = var.user_name
   depends_on = [ module.cloud_provider ] 
 }
+ 
 
 module "databricks_workspace" {
     source = "./databricks_workspace"
@@ -52,5 +54,27 @@ module "databricks_workspace" {
     uc_catalog_name       = "${var.resource_prefix}-catalog-${module.databricks_account.workspace_id}"
     workspace_catalog_admin = var.user_name
     team = var.team
-   depends_on = [ module.databricks_account ]
+
+
+    # Cluster creation variables
+
+    cluster_name          = var.resource_prefix
+    spark_version         = var.spark_version
+    node_type_id          = var.node_type_id
+    min_workers           = var.min_workers
+    max_workers           = var.max_workers
+    autotermination_minutes = var.autotermination_minutes
+    spark_profile         = var.spark_profile
+    cluster_type          = var.cluster_type
+
+    # SQL Compute creation variables
+    sql_compute_name      = var.resource_prefix
+    sql_cluster_size      = var.sql_cluster_size
+    sql_min_num_clusters  = var.sql_min_num_clusters
+    sql_max_num_clusters  = var.sql_max_num_clusters
+    sql_auto_stop_mins    = var.sql_auto_stop_mins
+
+    workspace_url = module.databricks_account.workspace_url
+
+      depends_on = [ module.databricks_account ]
 } 
