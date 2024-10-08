@@ -3,6 +3,7 @@
 resource "aws_s3_bucket" "root_storage_bucket" {
   bucket        = var.dbfsname
   force_destroy = true
+
   tags = {
     Name = var.dbfsname
   }
