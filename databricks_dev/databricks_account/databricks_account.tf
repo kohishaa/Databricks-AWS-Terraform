@@ -32,3 +32,4 @@ module "identity_assignment" {
   depends_on = [module.metastore_assignment]
 
 }
+
