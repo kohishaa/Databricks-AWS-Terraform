@@ -14,17 +14,25 @@ variable "workspace_id" {
   type = string
 }
 
+variable "workspace_url" {
+  type = string
+}
+
 variable "uc_catalog_name" {
   type = string
 }
+variable "schema_name" {
+  type = string
+}
+variable "volume_name" {
+  type = string
+}
+
 
 variable "workspace_catalog_admin" {
   type = string
 }
 
-variable "team" {
-  type = string
-}
 variable "team" {
   type = string
 }

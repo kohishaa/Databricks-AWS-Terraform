@@ -155,6 +155,28 @@ resource "databricks_catalog" "workspace_catalog" {
   depends_on = [databricks_external_location.workspace_catalog_external_location]
 }
 
+// Workspace Schema
+resource "databricks_schema" "workspace_schema" {
+  catalog_name = databricks_catalog.workspace_catalog.name
+  name           = var.schema_name
+  comment        = "This catalog is for workspace - ${var.workspace_id}"
+  properties = {
+    purpose = "schema for workspace - ${var.workspace_id}"
+  }
+  depends_on = [databricks_catalog.workspace_catalog]
+}
+
+resource "databricks_volume" "workspace_volume" {
+  catalog_name     = databricks_catalog.workspace_catalog.name  
+  schema_name      = databricks_schema.workspace_schema.name     
+  name             = var.volume_name             
+  volume_type      = "EXTERNAL"               
+  comment          = "This volume is for workspace ${var.workspace_id}"
+  storage_location = "s3://${var.uc_catalog_name}/catalog/${var.volume_name}/"
+} 
+
+
+
 // Grant Admin Catalog Perms
 resource "databricks_grant" "workspace_catalog" {
   catalog = databricks_catalog.workspace_catalog.name

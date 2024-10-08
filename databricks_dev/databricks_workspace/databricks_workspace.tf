@@ -5,6 +5,8 @@ module "uc_catalog" {
   aws_account_id          = var.aws_account_id
   resource_prefix         = var.resource_prefix
   uc_catalog_name         = "${var.resource_prefix}-catalog-${var.workspace_id}"
+  schema_name             = "${var.resource_prefix}-schema-${var.workspace_id}"
+  volume_name             = "${var.resource_prefix}-volume-${var.workspace_id}"
   workspace_id            = var.workspace_id
   workspace_catalog_admin = var.workspace_catalog_admin
   
@@ -46,5 +48,6 @@ module "cluster_creation" {
   sql_max_num_clusters     = var.sql_max_num_clusters
   sql_auto_stop_mins       = var.sql_auto_stop_mins
 }
+
 
 

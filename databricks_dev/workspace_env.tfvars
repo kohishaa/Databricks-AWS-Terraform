@@ -10,18 +10,18 @@ aws_account_id = ""
 region = ""
 
 // General - Databricks 
-databricks_account_id = "" 
+databricks_account_id = ""
 client_id = "" 
 client_secret = "" 
 metastore_id = ""
 
 
 availability_zones = 
- private_subnets_cidr = 
+ private_subnets_cidr =
  public_subnets_cidr = 
  sg_egress_ports = 
- sg_egress_protocol =
- sg_ingress_protocol =
+ sg_egress_protocol = 
+ sg_ingress_protocol = 
  vpc_cidr_range = ""
  
 
@@ -51,4 +51,4 @@ sql_compute_name         = ""
 sql_cluster_size         = ""  # Databricks-specific SQL cluster size
 sql_min_num_clusters     = 
 sql_max_num_clusters     = 
-sql_auto_stop_mins       = 3
+sql_auto_stop_mins       = 
