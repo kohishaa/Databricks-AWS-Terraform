@@ -1,0 +1,205 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+  branches:
+    include:
+   
+ 
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+# stage 1: validate logging module
+  - stage: tfvalidate_logging
+    displayName: tfvalidate_logging
+    jobs:
+      - job: validate_logging
+        continueOnError: false
+        steps:
+        - task: TerraformInstaller@1
+          displayName: terraform install 
+          inputs:
+            terraformVersion: 'latest'
+        - script: sudo rm -rf /opt/hostedtoolcache/terraform
+          displayName : clear cache
+        - task: AWSCLI@1
+          inputs:
+            awsCredentials: 'aws-us-east-1'
+            regionName: 'us-east-1'
+            awsCommand: 's3'
+            awsSubCommand: 'ls'
+        - task: TerraformTaskV4@4
+          displayName: init logging module
+          inputs:
+            provider: 'aws'
+            command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/dbx-aws-terraform/common_infrastructure/logging'
+            backendServiceAWS: 'aws-terraform'
+            backendAWSBucketName: 'dev-state-file-bucket-test'
+            backendAWSKey: 'project/logging/logging.tfstate'
+        - task: TerraformTaskV4@4
+          displayName: validate logging 
+          inputs:
+            provider: 'aws'
+            command: 'validate'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/dbx-aws-terraform/common_infrastructure/logging'
+            backendServiceAWS: 'aws-terraform'
+# stage 2: Apply Logging Module
+  - stage: tfapply_logging
+    condition: succeeded('tfvalidate_logging')
+    dependsOn: tfvalidate_logging
+    jobs:
+      - job: apply_logging
+        steps:
+          - task: TerraformTaskV4@4
+            displayName: init logging module
+            inputs:
+              provider: 'aws'
+              command: 'init'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/dbx-aws-terraform/common_infrastructure/logging'
+              backendServiceAWS: 'aws-terraform'
+              backendAWSBucketName: 'dev-state-file-bucket-test'
+              backendAWSKey: 'project/logging/logging.tfstate'
+          - task: TerraformTaskV4@4
+            displayName: plan logging module
+            inputs:
+              provider: 'aws'
+              command: 'plan'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/dbx-aws-terraform/common_infrastructure/logging'
+              environmentServiceNameAWS: 'aws-terraform'
+              backendAWSBucketName: 'dev-state-file-bucket-test'
+              backendAWSKey: 'project/logging/logging.tfstate'
+              commandOptions: '-var-file=logging.tfvars'
+
+          - task: TerraformTaskV4@4
+            displayName: apply logging module
+            inputs:
+              provider: 'aws'
+              command: 'apply'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/dbx-aws-terraform/common_infrastructure/logging'
+              environmentServiceNameAWS: 'aws-terraform'
+              backendAWSBucketName: 'dev-state-file-bucket-test'
+              backendAWSKey: 'project/logging/logging.tfstate'
+              commandOptions: '-var-file=logging.tfvars'
+  # Stage 3: Validate Unity Catalog Module
+  - stage: tfvalidate_unity_catalog
+    jobs:
+      - job: validate_unity_catalog
+        continueOnError: false
+        steps:
+        - task: TerraformInstaller@1
+          displayName: terraform install
+          inputs:
+            terraformVersion: 'latest'
+        - task: TerraformTaskV4@4
+          displayName: init unity catalog
+          inputs:
+            provider: 'aws'
+            command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/dbx-aws-terraform/common_infrastructure/unity_catalog'
+            backendServiceAWS: 'aws-terraform'
+            backendAWSBucketName: 'dev-state-file-bucket-test'
+            backendAWSKey: 'project/unity_catalog/Unity_catalog.tfstate'
+        - task: TerraformTaskV4@4
+          displayName: validate unity catalog
+          inputs:
+            provider: 'aws'
+            command: 'validate'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/dbx-aws-terraform/common_infrastructure/unity_catalog'
+            backendServiceAWS: 'aws-terraform'
+
+  # Stage 4: Apply Unity Catalog Module
+  - stage: tfapply_unity_catalog
+    condition: succeeded('tfvalidate_unity_catalog')
+    dependsOn: tfvalidate_unity_catalog
+    jobs:
+      - job: apply_unity_catalog
+        steps:
+        - task: TerraformTaskV4@4
+          displayName: init unity catalog
+          inputs:
+            provider: 'aws'
+            command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/dbx-aws-terraform/common_infrastructure/unity_catalog'
+            backendServiceAWS: 'aws-terraform'
+            backendAWSBucketName: 'dev-state-file-bucket-test'
+            backendAWSKey: 'project/unity_catalog/Unity_catalog.tfstate'
+        - task: TerraformTaskV4@4
+          displayName: plan unity catalog
+          inputs:
+            provider : 'aws'
+            command: 'plan'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/dbx-aws-terraform/common_infrastructure/unity_catalog'
+            environmentServiceNameAWS: 'aws-terraform'
+            backendAWSBucketName: 'dev-state-file-bucket-test'
+            backendAWSKey: 'project/unity_catalog/Unity_catalog.tfstate'
+            commandOptions: '-var-file=unity_catalog.tfvars'
+
+        - task: TerraformTaskV4@4
+          displayName: apply unity catalog
+          inputs:
+            provider: 'aws'
+            command: 'apply'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/dbx-aws-terraform/common_infrastructure/unity_catalog'
+            environmentServiceNameAWS: 'aws-terraform'
+            backendAWSBucketName: 'dev-state-file-bucket-test'
+            backendAWSKey: 'project/unity_catalog/Unity_catalog.tfstate'
+            commandOptions: '-var-file=unity_catalog.tfvars'
+# stage 5: validate and apply cloud provider module
+  - stage: tfvalidate_cloud_provider
+    jobs:
+      - job: validate_apply_cloud_provider_module
+        displayName: tfvalidate_apply_cloud
+        steps:
+        - task: TerraformInstaller@1
+          displayName: Install Terraform
+          inputs:
+            terraformVersion: 'latest'
+
+        - task: TerraformTaskV4@4
+          displayName: Initialize Cloud Provider
+          inputs:
+            provider: 'aws'
+            command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/dbx-aws-terraform/databricks_dev'  
+            backendServiceAWS: 'aws-terraform'
+            backendAWSBucketName: 'dev-state-file-bucket-test'
+            backendAWSKey: 'project/databricks_dev/cloud_provider.tfstate'
+
+        - task: TerraformTaskV4@4
+          displayName: Validate Cloud Provider
+          inputs:
+            provider: 'aws'
+            command: 'validate'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/dbx-aws-terraform/databricks_dev'  
+            backendServiceAWS: 'aws-terraform'
+            backendAWSBucketName: 'dev-state-file-bucket-test'
+            backendAWSKey: 'project/databricks_dev/cloud_provider.tfstate'
+
+        - task: TerraformTaskV4@4
+          displayName: Plan Cloud Provider
+          inputs:
+            provider: 'aws'
+            command: 'plan'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/dbx-aws-terraform/databricks_dev'  
+            environmentServiceNameAWS: 'aws-terraform'
+            backendAWSBucketName: 'dev-state-file-bucket-test'
+            backendAWSKey: 'project/databricks_dev/cloud_provider.tfstate'
+            commandOptions: '-var-file=workspace_env.tfvars'
+
+        - task: TerraformTaskV4@4
+          displayName: Apply Cloud Provider
+          inputs:
+            provider: 'aws'
+            command: 'apply'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/dbx-aws-terraform/databricks_dev'  
+            environmentServiceNameAWS: 'aws-terraform'
+            backendAWSBucketName: 'dev-state-file-bucket-test'
+            backendAWSKey: 'project/databricks_dev/cloud_provider.tfstate'
+            commandOptions: '-var-file=workspace_env.tfvars' 
+        - script: terraform output
+          displayName: Display terraform output
