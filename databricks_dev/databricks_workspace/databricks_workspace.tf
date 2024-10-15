@@ -55,3 +55,13 @@ module "dev_compute_policy" {
   depends_on = [ module.cluster_creation ]
 }
 
+module "workspace_identity_assignment" {
+  source = "../../common_modules_workspace/workspace_identity_assignment"
+
+  group_id  = module.uc_catalog.workspace_dataengineer_group_id  # Passed from the catalog module
+  user1_id  = var.user1_id
+  user2_id  = var.user2_id
+  user3_id  = var.user3_id
+  depends_on = [ module.uc_catalog ]
+}
+

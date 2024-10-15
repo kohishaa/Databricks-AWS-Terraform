@@ -29,7 +29,7 @@ resource "databricks_permissions" "all_purpose_cluster_access"{
    group_name = var.group_name
   permission_level = "CAN_ATTACH_TO"
   }
-  depends_on = [ var.all_purpose_cluster_id ]
+  depends_on = [ var.group_name ]
 }
 resource "databricks_permissions" "sql_compute_cluster_access"{
   sql_endpoint_id = var.sql_compute_cluster_id
@@ -37,5 +37,5 @@ resource "databricks_permissions" "sql_compute_cluster_access"{
    group_name = var.group_name
   permission_level = "CAN_USE"
   }
-  depends_on = [ var.sql_compute_cluster_id ]
+  depends_on = [ var.group_name ]
 }

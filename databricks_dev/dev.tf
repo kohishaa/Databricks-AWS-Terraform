@@ -20,7 +20,7 @@ module "cloud_provider" {
 }
 
 
- module "databricks_account" {
+  module "databricks_account" {
     source = "./databricks_account"
     providers = {
         databricks = databricks.mws
@@ -61,9 +61,10 @@ module "databricks_workspace" {
     workspace_catalog_admin = var.user_name
     group_name = module.databricks_workspace.workspace_dataengineer_group_name
     team = var.team
-    user1_id = module.databricks_account.user1_name
-    user2_id = module.databricks_account.user2_name
-    user3_id = module.databricks_account.user3_name
+    user1_id = module.databricks_account.user1_id
+    user2_id = module.databricks_account.user2_id
+    user3_id = module.databricks_account.user3_id
+
     # Cluster creation variables
 
     cluster_name          = var.resource_prefix

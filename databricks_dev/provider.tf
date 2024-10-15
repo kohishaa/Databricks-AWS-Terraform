@@ -1,9 +1,9 @@
 terraform {
   backend "s3" {
-    bucket = ""
-    dynamodb_table = ""
-    key = ""
-    region= ""
+    bucket = "dev-state-file-bucket-test"
+    dynamodb_table = "dev-statelock-terraform-test"
+    key = "project/databricks_dev/cloud_provider.tfstate"
+    region= "us-east-1"
 
   }
   required_providers {

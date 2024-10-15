@@ -154,3 +154,4 @@ variable "sql_auto_stop_mins" {
 variable "group_name" {
   type = string
 }
+
