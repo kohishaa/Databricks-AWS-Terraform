@@ -88,6 +88,20 @@ variable "sql_max_num_clusters" {
 
 variable "sql_auto_stop_mins" {
     type = number
-   
- }
+}
 
+variable "group_name" {
+  type = string
+}
+
+variable "user1_id" {
+  type = string
+}
+
+variable "user2_id" {
+  type = string
+}
+
+variable "user3_id" {
+  type = string
+}

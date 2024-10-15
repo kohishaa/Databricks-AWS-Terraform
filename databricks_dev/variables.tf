@@ -65,6 +65,15 @@ variable "team" {
 variable "user_name" {
   type        = string
 }
+variable "user_name1" {
+  type        = string
+}
+variable "user_name2" {
+  type        = string
+}
+variable "user_name3" {
+  type        = string
+}
 
 variable "vpc_cidr_range" {
   type        = string
@@ -142,4 +151,6 @@ variable "sql_max_num_clusters" {
 variable "sql_auto_stop_mins" {
   type = number
 }
-
+variable "group_name" {
+  type = string
+}

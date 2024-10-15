@@ -28,8 +28,12 @@ module "identity_assignment" {
 
   workspace_id = module.workspace.workspace_id
   user_name    = var.user_name
-
+  user_name1 = var.user_name1
+  user_name2 = var.user_name2
+  user_name3 = var.user_name3
+  group_name = var.group_name
   depends_on = [module.metastore_assignment]
 
 }
+
 

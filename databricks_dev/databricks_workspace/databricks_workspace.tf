@@ -9,18 +9,7 @@ module "uc_catalog" {
   volume_name             = "${var.resource_prefix}-volume-${var.workspace_id}"
   workspace_id            = var.workspace_id
   workspace_catalog_admin = var.workspace_catalog_admin
-  
-}
-
-module "dev_compute_policy" {
-  source = "../../common_modules_workspace/cluster_policy"
-  team   = var.team
-  policy_overrides = {
-    "spark_conf.spark.databricks.io.cache.enabled" : {
-      "type" : "fixed",
-      "value" : "true"
-    },
-  }
+  group_name              = var.group_name
 }
 
 module "cluster_creation" {
@@ -50,4 +39,19 @@ module "cluster_creation" {
 }
 
 
+module "dev_compute_policy" {
+  source = "../../common_modules_workspace/cluster_policy"
+  all_purpose_cluster_id  = module.cluster_creation.all_purpose_cluster_id
+  sql_compute_cluster_id =  module.cluster_creation.sql_compute_cluster_id
+  group_name = var.group_name
+
+  team   = var.team
+  policy_overrides = {
+    "spark_conf.spark.databricks.io.cache.enabled" : {
+      "type" : "fixed",
+      "value" : "true"
+    },
+  }
+  depends_on = [ module.cluster_creation ]
+}
 

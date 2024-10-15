@@ -27,3 +27,6 @@ variable "volume_name" {
 variable "workspace_catalog_admin" {
   type = string
 }
+variable "group_name" {
+  type = string
+}

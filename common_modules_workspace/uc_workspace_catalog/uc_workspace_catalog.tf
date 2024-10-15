@@ -184,3 +184,8 @@ resource "databricks_grant" "workspace_catalog" {
   principal  = var.workspace_catalog_admin
   privileges = ["ALL_PRIVILEGES"]
 }
+
+// create dataengineer group at workspace level
+resource "databricks_group" "workspace_dataengineer_group" {
+  display_name = "dataengineer"
+}

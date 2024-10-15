@@ -20,7 +20,7 @@ module "cloud_provider" {
 }
 
 
-  module "databricks_account" {
+ module "databricks_account" {
     source = "./databricks_account"
     providers = {
         databricks = databricks.mws
@@ -36,6 +36,10 @@ module "cloud_provider" {
       security_group_ids     = module.cloud_provider.cloud_provider_network_security_groups
       metastore_id           = var.metastore_id
       user_name              = var.user_name
+      user_name1             = var.user_name1
+      user_name2             = var.user_name2
+      user_name3             = var.user_name3
+      group_name             = var.group_name
   depends_on = [ module.cloud_provider ] 
 }
  
@@ -55,9 +59,11 @@ module "databricks_workspace" {
     schema_name           = "${var.resource_prefix}-schema-${module.databricks_account.workspace_id}"
     volume_name           = "${var.resource_prefix}-volume-${module.databricks_account.workspace_id}"
     workspace_catalog_admin = var.user_name
+    group_name = module.databricks_workspace.workspace_dataengineer_group_name
     team = var.team
-
-
+    user1_id = module.databricks_account.user1_name
+    user2_id = module.databricks_account.user2_name
+    user3_id = module.databricks_account.user3_name
     # Cluster creation variables
 
     cluster_name          = var.resource_prefix
@@ -77,6 +83,7 @@ module "databricks_workspace" {
     sql_auto_stop_mins    = var.sql_auto_stop_mins
 
     workspace_url = module.databricks_account.workspace_url
+  
 
-      depends_on = [ module.databricks_account ]
+  depends_on = [ module.databricks_account ]
 } 
