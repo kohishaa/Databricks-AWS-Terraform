@@ -12,6 +12,9 @@ variable "sql_compute_cluster_id" {
   type = string
 }
 
+variable "group_id" {
+  type = string
+}
 variable "group_name" {
   type = string
 }

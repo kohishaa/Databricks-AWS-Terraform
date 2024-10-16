@@ -1,7 +1,7 @@
-variable "group_id" {
+ variable "group_id" {
   description = "The ID of the group created at the workspace level"
   type        = string
-}
+} 
 
 variable "user1_id" {
   description = "User1 ID passed from databricks_account output"

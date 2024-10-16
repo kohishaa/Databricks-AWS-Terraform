@@ -185,7 +185,7 @@ resource "databricks_grant" "workspace_catalog" {
   privileges = ["ALL_PRIVILEGES"]
 }
 
-// create dataengineer group at workspace level
+ // create dataengineer group at workspace level
 resource "databricks_group" "workspace_dataengineer_group" {
   display_name = "dataengineer"
-}
+} 
