@@ -30,6 +30,10 @@ dbfsname = ""
 
 // Workspace and Catalog Admin 
 user_name = ""
+user_name1 = ""
+user_name2 = ""
+user_name3 = ""
+group_name = ""
 
 // Cluster Policy 
 team = ""
