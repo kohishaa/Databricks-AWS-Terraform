@@ -9,6 +9,10 @@ output "workspace_id" {
 output "dataengineer_group_name"{
     value = module.identity_assignment.dataengineer_group_name
 }
+
+output "dataengineer_group_id"{
+    value = module.identity_assignment.dataengineer_group_id
+}
 output "user1_id"{
     value = module.identity_assignment.user1_id
 }

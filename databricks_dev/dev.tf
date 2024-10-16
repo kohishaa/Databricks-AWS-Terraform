@@ -59,11 +59,12 @@ module "databricks_workspace" {
     schema_name           = "${var.resource_prefix}-schema-${module.databricks_account.workspace_id}"
     volume_name           = "${var.resource_prefix}-volume-${module.databricks_account.workspace_id}"
     workspace_catalog_admin = var.user_name
+    group_id = module.databricks_account.dataengineer_group_id
     group_name = module.databricks_workspace.workspace_dataengineer_group_name
     team = var.team
     user1_id = module.databricks_account.user1_id
     user2_id = module.databricks_account.user2_id
-    user3_id = module.databricks_account.user3_id
+    user3_id = module.databricks_account.user3_id 
 
     # Cluster creation variables
 

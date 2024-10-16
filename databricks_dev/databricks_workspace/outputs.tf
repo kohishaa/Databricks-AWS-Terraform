@@ -10,4 +10,4 @@ output "sql_compute_cluster_id" {
 
 output "workspace_dataengineer_group_name" {
   value = module.uc_catalog.workspace_dataengineer_group_name
-}
+} 

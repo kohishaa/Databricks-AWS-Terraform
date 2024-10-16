@@ -43,8 +43,8 @@ module "dev_compute_policy" {
   source = "../../common_modules_workspace/cluster_policy"
   all_purpose_cluster_id  = module.cluster_creation.all_purpose_cluster_id
   sql_compute_cluster_id =  module.cluster_creation.sql_compute_cluster_id
+  group_id = var.group_id
   group_name = var.group_name
-
   team   = var.team
   policy_overrides = {
     "spark_conf.spark.databricks.io.cache.enabled" : {

@@ -94,7 +94,11 @@ variable "sql_auto_stop_mins" {
 
 /* variable "all_purpose_cluster_id" {
   type = string
-} */
+}  */
+
+variable "group_id" {
+  type = string
+}
 variable "group_name" {
   type = string
 }
@@ -109,4 +113,4 @@ variable "user2_id" {
 
 variable "user3_id" {
   type = string
-}
+} 
