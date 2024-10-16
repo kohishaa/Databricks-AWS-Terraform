@@ -22,19 +22,22 @@ resource "databricks_group" "dataengineer" {
 
 // add users to data engineer group
 
-resource "databricks_group_member" "databricks_group_membership" {
+resource "databricks_group_member" "databricks_group_membership_user1" {
   group_id  = databricks_group.dataengineer.id
   member_id = databricks_user.user1.id  # For user 1
+  depends_on = [ var.group_name ]
 }
 
 resource "databricks_group_member" "databricks_group_membership_user2" {
   group_id  = databricks_group.dataengineer.id
   member_id = databricks_user.user2.id  # For user 2
+  depends_on = [ var.group_name ]
 }
 
 resource "databricks_group_member" "databricks_group_membership_user3" {
   group_id  = databricks_group.dataengineer.id
   member_id = databricks_user.user3.id  # For user 3
+  depends_on = [ var.group_name ]
 }
 
 
